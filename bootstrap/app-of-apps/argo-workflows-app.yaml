@@ -1,18 +1,16 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: kyverno
-  namespace: openshift-gitops
+  name: Argo-Workflows
 spec:
   destination:
-    namespace: kyverno
+    namespace: argo
     server: https://kubernetes.default.svc
   project: default
   source:
-    helm:
-    chart: kyverno
-    repoURL: https://kyverno.github.io/kyverno/
-    targetRevision: v2.3.1
+    path: bootstrap/argo-workflows/cluster-install/
+    repoURL: https://github.com/rcarrata/argocon22-securing-gitops-supply-chain
+    targetRevision: main
   syncPolicy:
     automated:
       prune: true
