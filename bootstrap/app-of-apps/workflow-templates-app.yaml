@@ -8,7 +8,7 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    path: bootstrap/workflows-templates/
+    path: bootstrap/workflow-templates/
     repoURL: https://github.com/rcarrata/argocon22-securing-gitops-supply-chain
     targetRevision: main
   syncPolicy:
