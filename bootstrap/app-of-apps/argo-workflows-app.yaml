@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: Argo-Workflows
+  name: argo-workflows
 spec:
   destination:
     namespace: argo

@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: Workflow-Templates
+  name: workflow-templates
 spec:
   destination:
     namespace: argo
