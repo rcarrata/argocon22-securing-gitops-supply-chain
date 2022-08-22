@@ -1,0 +1,38 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: container-build
+  annotations:
+    workflows.argoproj.io/description: >-
+      Uses Kaniko to build a container image within Kubernetes.
+    workflows.argoproj.io/maintainer: 'Rcarrata'
+    workflows.argoproj.io/maintainer_url: 'https://github.com/rcarrata/argocon22-securing-gitops-supply-chain'
+    workflows.argoproj.io/version: '>= 3.3.6'
+spec:
+  entrypoint: main
+  templates:
+  - name: main
+    dag:
+      tasks:
+        - name: container-build
+          template: container-build
+
+  - name: container-build
+    container:
+      image: registry.redhat.io/rhel8/buildah@sha256:e19cf23d5f1e0608f5a897f0a50448beb9f8387031cca49c7487ec71bd91c4d3
+      command: ['sh', '-c']
+      args:
+      - echo "Retrieving git clone..." && cp -R /workdir/{{workflow.parameters.app_repo}} /container-build
+
+      - buildah --storage-driver=vfs bud --format=oci --tls-verify=true --no-cache -f {{workflow.parameters.dockerfile}} -t {{workflow.parameters.container_image}}:{{workflow.parameters.container_tag}} .
+      volumeMounts:
+        - name: container-build
+          mountPath: /container-build
+        - name: workdir
+          mountPath: /workdir
+      resources:
+        requests:
+          memory: 1Gi
+          cpu: 1
+      #20 minutes
+      activeDeadlineSeconds: 1200

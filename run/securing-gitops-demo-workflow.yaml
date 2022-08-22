@@ -9,15 +9,15 @@ spec:
   arguments:
     parameters:
       - name: app_repo
-        value: "argo-workflows-ci-example"
+        value: "https://github.com/openshift/pipelines-vote-api.git"
       - name: git_branch
-        value: 'example'
+        value: 'master'
       - name: target_branch
-        value: 'main'
+        value: 'master'
       - name: container_tag
-        value: 'stable'
+        value: 'v2'
       - name: container_image
-        value: "k3d-registry.localhost:5000/hello-world"
+        value: "ghcr.io/rcarrata/pipelines-vote-api:v2"
       - name: dockerfile
         value: Dockerfile
       - name: path
