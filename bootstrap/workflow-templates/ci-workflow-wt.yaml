@@ -32,6 +32,12 @@ spec:
   volumes:
   - name: container-build
     emptyDir: {}
+  - name: ghcr-auth-secret
+    secret:
+      items:
+        - key: .dockerconfigjson
+          path: config.json
+      secretName: regcred
 # You can set default paramaters here if you prefer. If you simply don't inject them when calling this template, the defaults will come through.
 # We default 'container_tag' to 'stable' here.
   arguments:
@@ -50,6 +56,8 @@ spec:
       value: ""
     - name: path
       value: ""
+    - name: deployment_name
+      value: ""
  # All the steps in this DAG are referencing external templates.
  # This allows us to re-use those templates in other workflows, and also makes this CI workflow quite tidy.
  # For reference we have also included a 'local' template (delete-application) to show that it's possible to mix-and-match local and external templates. 
@@ -66,3 +74,13 @@ spec:
               name: container-build
               template: main
             depends: git-clone
+          - name: apply-manifests
+            templateRef:
+              name: apply-manifests
+              template: main
+            depends: container-build
+          - name: update-manifests
+            templateRef:
+              name: update-manifests
+              template: main
+            depends: apply-manifests

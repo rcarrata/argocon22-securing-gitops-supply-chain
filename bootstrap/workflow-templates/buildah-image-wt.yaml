@@ -20,16 +20,22 @@ spec:
   - name: container-build
     container:
       image: registry.redhat.io/rhel8/buildah@sha256:e19cf23d5f1e0608f5a897f0a50448beb9f8387031cca49c7487ec71bd91c4d3
-      command: ['sh', '-c']
-      args:
-      - echo "Retrieving git clone..." && cp -R /workdir/{{workflow.parameters.app_repo}} /container-build
+      command:
+        - sh
+        - -c
+        - |
+          set -x
+          cd /workdir/repo-app
+          buildah --storage-driver=vfs bud --format=oci --no-cache --tls-verify=false -f {{workflow.parameters.dockerfile}} -t {{workflow.parameters.container_image}}:{{workflow.parameters.container_tag}} .
 
-      - buildah --storage-driver=vfs bud --format=oci --tls-verify=true --no-cache -f {{workflow.parameters.dockerfile}} -t {{workflow.parameters.container_image}}:{{workflow.parameters.container_tag}} .
+          buildah --storage-driver=vfs push '--authfile' /etc/secret-volume/config.json --tls-verify=false --digestfile /workdir/repo-app/image-digest {{workflow.parameters.container_image}}:{{workflow.parameters.container_tag}} docker://{{workflow.parameters.container_image}}:{{workflow.parameters.container_tag}}
+
       volumeMounts:
-        - name: container-build
-          mountPath: /container-build
         - name: workdir
           mountPath: /workdir
+        - mountPath: /etc/secret-volume
+          name: ghcr-auth-secret
+          readOnly: true
       resources:
         requests:
           memory: 1Gi

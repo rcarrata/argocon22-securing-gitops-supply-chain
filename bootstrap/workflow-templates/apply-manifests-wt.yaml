@@ -1,0 +1,39 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: apply-manifests
+  annotations:
+    workflows.argoproj.io/description: >-
+      Apply the Manifests for deploy the application in K8s
+    workflows.argoproj.io/maintainer: 'Rcarrata'
+    workflows.argoproj.io/maintainer_url: 'https://github.com/rcarrata/argocon22-securing-gitops-supply-chain'
+    workflows.argoproj.io/version: '>= 3.3.6'
+spec:
+  entrypoint: main
+  templates:
+  - name: main
+    dag:
+      tasks:
+        - name: apply-manifests
+          template: apply-manifests
+
+  - name: apply-manifests
+    container:
+      image: bitnami/kubectl:latest
+      command:
+        - sh
+        - -c
+        - |
+          echo Applying manifests in {{workflow.parameters.path}} directory
+          cd /workdir/repo-app
+          kubectl apply -f {{workflow.parameters.path}}
+          echo -----------------------------------          
+      volumeMounts:
+        - name: workdir
+          mountPath: /workdir
+      resources:
+        requests:
+          memory: 1Gi
+          cpu: 1
+      #20 minutes
+      activeDeadlineSeconds: 1200

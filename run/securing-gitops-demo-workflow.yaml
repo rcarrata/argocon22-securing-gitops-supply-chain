@@ -9,7 +9,7 @@ spec:
   arguments:
     parameters:
       - name: app_repo
-        value: "https://github.com/openshift/pipelines-vote-api.git"
+        value: "https://github.com/rcarrata/pipelines-vote-api"
       - name: git_branch
         value: 'master'
       - name: target_branch
@@ -17,10 +17,12 @@ spec:
       - name: container_tag
         value: 'v2'
       - name: container_image
-        value: "ghcr.io/rcarrata/pipelines-vote-api:v2"
+        value: "ghcr.io/rcarrata/pipelines-vote-api"
       - name: dockerfile
         value: Dockerfile
       - name: path
-        value: "/CI"
+        value: "k8s/"
+      - name: deployment_name
+        value: "pipelines-vote-api"
   workflowTemplateRef:
     name: ci-workflow

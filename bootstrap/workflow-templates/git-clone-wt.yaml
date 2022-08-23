@@ -20,20 +20,17 @@ spec:
 
   - name: git-clone
     container:
-      image: alpine:latest
+      image: alpine/git
       command:
         - sh
         - -c
         - |
-          apk --update add git
           cd /workdir
+          echo "Cleaning the previous jobs"
+          rm -rf /workdir/repo-app
           echo "Start Clone of source branch"
-          git clone {{workflow.parameters.app_repo}}.git
-          cd {{workflow.parameters.app_repo}}
-          ## These lines are a hack just for the example.
-          git config --global --add safe.directory /workdir/{{workflow.parameters.app_repo}}
-          git config --global user.email "rcarrata@redhat.com"
-          git config --global user.name "Roberto Carratala"
+          git clone {{workflow.parameters.app_repo}}.git /workdir/repo-app
+          cd repo-app/
           git checkout {{workflow.parameters.git_branch}}
           echo "Complete."
       volumeMounts:
