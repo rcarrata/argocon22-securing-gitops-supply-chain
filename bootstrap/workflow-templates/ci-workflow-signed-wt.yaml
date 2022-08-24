@@ -1,0 +1,93 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: ci-workflow-signed
+  annotations:
+    workflows.argoproj.io/description: >-
+      A basic CI leveraging Argo Workflows.
+
+      The Workflow...
+
+      * pulls a repo from git. Specifically pulling a branch based on a pull request;
+      * merges the target branch into it;
+      * modifies the html that will be copied into the container to inject the unique name of the running workflow;
+      * builds a container from a Dockerfile and pushes to a registry;
+      * deploys an Argo CD application that uses the newly-built container to deploy a static website.
+
+    workflows.argoproj.io/maintainer: 'Rcarrata'
+    workflows.argoproj.io/maintainer_url: 'https://github.com/rcarrata/argocon22-securing-gitops-supply-chain'
+    workflows.argoproj.io/version: '>= 3.3.6'
+spec:
+  entrypoint: main
+  volumeClaimTemplates:
+  - metadata:
+      name: workdir
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
+  # The container build step copies the code from the NFS share to this ephemeral volume, and then runs the build.
+  # We do this a) because NFS shares are slow and b) to allow us to run another workflow step alongside the build if we wish.
+  volumes:
+  - name: container-build
+    emptyDir: {}
+  - name: ghcr-auth-secret
+    secret:
+      items:
+        - key: .dockerconfigjson
+          path: config.json
+      secretName: regcred
+# You can set default paramaters here if you prefer. If you simply don't inject them when calling this template, the defaults will come through.
+# We default 'container_tag' to 'stable' here.
+  arguments:
+    parameters:
+    - name: app_repo
+      value: ""
+    - name: git_branch
+      value: ""
+    - name: target_branch
+      value: ""
+    - name: container_tag
+      value: "stable"
+    - name: container_image
+      value: ""
+    - name: dockerfile
+      value: ""
+    - name: path
+      value: ""
+    - name: deployment_name
+      value: ""
+    - name: namespace
+      value: ""
+ # All the steps in this DAG are referencing external templates.
+ # This allows us to re-use those templates in other workflows, and also makes this CI workflow quite tidy.
+ # For reference we have also included a 'local' template (delete-application) to show that it's possible to mix-and-match local and external templates. 
+  templates:
+    - name: main
+      dag:
+        tasks:
+          - name: git-clone
+            templateRef:
+              name: git-clone
+              template: main
+          - name: container-build
+            templateRef:
+              name: container-build
+              template: main
+            depends: git-clone
+          - name: sign-image
+            templateRef:
+              name: sign-image
+              template: main
+            depends: container-build        
+          - name: apply-manifests
+            templateRef:
+              name: apply-manifests
+              template: main
+            depends: sign-image
+          - name: update-manifests
+            templateRef:
+              name: update-manifests
+              template: main
+            depends: apply-manifests

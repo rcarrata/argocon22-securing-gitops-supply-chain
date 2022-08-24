@@ -5,10 +5,17 @@ namespace: argo
 
 resources:
 - clustertasks-buildah-custom.yaml
+- apply-manifests-wt.yaml
+- buildah-image-wt.yaml
+- ci-workflow-signed-wt.yaml
+- ci-workflow-wt.yaml
+- git-clone-wt.yaml
+- sign-image-wt.yaml
+- kyverno-check-images-cluster-policy.yaml
+
 # - sign-images-pipeline-pvc.yaml
 # - sign-images-pipeline.yaml
 # - unsigned-images-pipeline.yaml
 # - tasks-apply-manifests.yaml
 # - tasks-cosign.yaml
 # - tasks-update-deployment.yaml
-# - kyverno-check-images-cluster-policy.yaml

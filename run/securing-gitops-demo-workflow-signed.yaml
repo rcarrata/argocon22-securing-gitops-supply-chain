@@ -1,10 +1,10 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  generateName: ci-workflow
+  generateName: ci-workflow-signed
   namespace: argo
   labels:
-    workflows.argoproj.io/workflow-template: ci-workflow
+    workflows.argoproj.io/workflow-template: ci-workflow-signed
 spec:
   arguments:
     parameters:
@@ -15,7 +15,7 @@ spec:
       - name: target_branch
         value: 'master'
       - name: container_tag
-        value: 'v3'
+        value: 'v2'
       - name: container_image
         value: "ghcr.io/rcarrata/pipelines-vote-api"
       - name: dockerfile
@@ -24,5 +24,7 @@ spec:
         value: "k8s/"
       - name: deployment_name
         value: "pipelines-vote-api"
+      - name: namespace
+        value: "argo"
   workflowTemplateRef:
-    name: ci-workflow
+    name: ci-workflow-signed

@@ -18,6 +18,6 @@ spec:
       - image: "ghcr.io/rcarrata/pipelines-vote-api:*"
         key: |-
           -----BEGIN PUBLIC KEY-----
-          MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEo31F9RmEeZHCQexbv0vUyIKuFHXR
-          YM3Brq4nDqKQ3/3YRsAHgXeNOWZwemOnoZCJOkjDlM4CzkcrmGUCT7dmpw==
+          MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEVBk7bmcfhwyGIphj8EuwdFQrJX5N
+          Tv3fbHbVxAI7hX2aNHFTEoZ72LwcuK0taNCi0DDBTQhamhAXDiUbCRnA4Q==
           -----END PUBLIC KEY-----

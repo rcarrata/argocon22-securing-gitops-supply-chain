@@ -42,3 +42,41 @@ kubectl create secret docker-registry regcred --docker-server=ghcr.io --docker-u
 ```
 oc adm policy add-role-to-user -n argo -z default admin
 ```
+
+
+## Adding regcred to kyverno to read the signatures
+
+```
+kubectl get deploy kyverno -n kyverno -o yaml | grep containers -A5
+--
+      containers:
+      - args:
+        - --imagePullSecrets=regcred
+        env:
+        - name: INIT_CONFIG
+          value: kyverno
+```
+
+```
+kubectl create secret docker-registry regcred --docker-server=ghcr.io --docker-username=${USERNAME} --docker-email=${EMAIL} --docker-password=${PAT_TOKEN} -n kyverno
+```
+
+## Add regcreds to the pullsecret
+
+```
+export NAMESPACE=argo
+export SERVICE_ACCOUNT_NAME=argo
+kubectl patch serviceaccount $SERVICE_ACCOUNT_NAME \
+  -p "{\"imagePullSecrets\": [{\"name\": \"regcred\"}]}" -n $NAMESPACE
+kubectl patch serviceaccount default \
+ -p "{\"imagePullSecrets\": [{\"name\": \"regcred\"}]}" -n $NAMESPACE
+```
+
+
+
+
+## Adding Slack to Argo Notifications
+
+```
+https://github.com/argoproj/argo-workflows/blob/master/examples/exit-handler-slack.yaml
+```
