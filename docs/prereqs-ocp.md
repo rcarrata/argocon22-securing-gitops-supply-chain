@@ -28,7 +28,7 @@ oc adm policy add-scc-to-user -n argo -z default anyuid
 export PAT_TOKEN="xxx"
 export EMAIL="xxx"
 export USERNAME="rcarrata"
-export NAMESPACE="workshop"
+export NAMESPACE="argo"
 ```
 
 * Generate a docker-registry secret with the credentials for GitHub Registry to push/pull the images and signatures:

@@ -9,6 +9,6 @@ resources:
 - ci-workflow-signed-wt.yaml
 - ci-workflow-wt.yaml
 - git-clone-wt.yaml
-- kyverno-check-images-cluster-policy.yaml
+#- kyverno-check-images-cluster-policy.yaml
 - sign-image-wt.yaml
 - update-manifests-wt.yaml
