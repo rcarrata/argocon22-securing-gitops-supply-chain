@@ -8,6 +8,7 @@ resources:
   - postgres-service.yaml
   - argo-server-route.yaml
   - argo-server-scc-anyuid.yaml
+  - argo-server-role.yaml
 
 patchesStrategicMerge:
   - overlays/workflow-controller-configmap.yaml
