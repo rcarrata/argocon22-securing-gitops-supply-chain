@@ -8,7 +8,7 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    path: bootstrap/argo-workflows/cluster-install/
+    path: bootstrap/argo-workflows/deploy-argo/postgres/
     repoURL: https://github.com/rcarrata/argocon22-securing-gitops-supply-chain
     targetRevision: main
   syncPolicy:

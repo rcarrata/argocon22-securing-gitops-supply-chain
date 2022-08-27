@@ -1,0 +1,8 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- argo-server-clusterole.yaml
+- argo-server-clusterolebinding.yaml
+- argo-server-route.yaml
+- argo-server-scc-anyuid.yaml

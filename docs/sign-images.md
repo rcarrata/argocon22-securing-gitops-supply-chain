@@ -23,38 +23,8 @@ First, let's install Kyverno with GitOps using Helm chart.
 * To do that, let's deploy an ArgoCD Application with the Helm chart and the targetRevision for Kyverno:
 
 ```sh
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: kyverno
-  namespace: openshift-gitops
-spec:
-  destination:
-    namespace: kyverno
-    server: https://kubernetes.default.svc
-  project: default
-  source:
-    helm:
-    chart: kyverno
-    repoURL: https://kyverno.github.io/kyverno/
-    targetRevision: v2.3.1
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-    - CreateNamespace=true
+kubectl apply -k bootstrap/app-of-apps
 ```
-
-* Let's apply it in our K8S/OCP cluster:
-
-```sh
-kubectl apply -f argocd/kyverno-app.yaml
-```
-
-* After a couple of minutes, our Kyverno components are deployed in the Kubernetes clusters, and all are in sync:
-
-[![](/images/signing2.png "signing2.png")]({{site.url}}/images/signing2.png)
 
 NOTE: remember that you need to patch the Kyverno Deployment to add the registry credentials as we showed in the first part of this blog post:
 
