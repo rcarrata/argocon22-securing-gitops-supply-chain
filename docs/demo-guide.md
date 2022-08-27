@@ -1,5 +1,12 @@
 ## Pre Requisites for run the demo in OpenShift
 
+## Clone the GitHub
+
+```sh
+git clone https://github.com/rcarrata/argocon22-securing-gitops-supply-chain.git
+cd argocon22-securing-gitops-supply-chain
+```
+
 ## Install ArgoCD / OpenShift GitOps:
 
 * Install ArgoCD / OpenShift GitOps
@@ -16,11 +23,7 @@ ARGOCD_ROUTE=$(kubectl get route openshift-gitops-server -n openshift-gitops -o 
 curl -ks -o /dev/null -w "%{http_code}" https://$ARGOCD_ROUTE
 ```
 
-## TBD
-
-```
-oc adm policy add-scc-to-user -n argo -z default anyuid
-```
+## Add Github Registry Secrets
 
 * Export the token for the GitHub Registry / ghcr.io:
 
@@ -35,12 +38,6 @@ export NAMESPACE="argo"
 
 ```bash
 kubectl create secret docker-registry regcred --docker-server=ghcr.io --docker-username=${USERNAME} --docker-email=${EMAIL} --docker-password=${PAT_TOKEN} -n ${NAMESPACE}
-```
-
-* Add proper permissions to run the pipeline
-
-```
-oc adm policy add-role-to-user -n argo -z default admin
 ```
 
 ## Adding regcred to kyverno to read the signatures
@@ -82,10 +79,14 @@ cosign generate-key-pair k8s://${NAMESPACE}/cosign
 ## Run Normal Pipeline
 
 ```sh
-kubectl create -f securing-gitops-demo-workflow-normal.yaml
+kubectl create -f run/securing-gitops-demo-workflow-normal.yaml
 ```
 
+* Regular Pipeline for Build - Bake - Deploy
+
 <img align="center" width="570" src="assets/argo1.png">
+
+* GitHub Registry v1 App
 
 <img align="center" width="570" src="assets/argo2.png">
 
@@ -93,23 +94,59 @@ kubectl create -f securing-gitops-demo-workflow-normal.yaml
 ## Run the Hacked Pipeline
 
 ```sh
-kubectl create -f securing-gitops-demo-workflow-hacked.yaml
+kubectl create -f run/securing-gitops-demo-workflow-hacked.yaml
 ```
+
+* Hacked Pipeline with App with Hacked Dockerfile and App
 
 <img align="center" width="570" src="assets/argo3.png">
 
+* Hacked Application running in the App
+
 <img align="center" width="570" src="assets/argo4.png">
 
-## Run the Hacked Pipeline
+* GitHub Registry hacked App
+
+<img align="center" width="570" src="assets/argo5.png">
+
+
+## Deploy the Image Check Kyverno Cluster Policy
 
 ```sh
-kubectl create -f securing-gitops-demo-workflow-hacked.yaml
+kubectl apply -k policy
 ```
 
-<img align="center" width="570" src="assets/argo3.png">
+## Run the Signed Pipeline
 
-<img align="center" width="570" src="assets/argo4.png">
+```sh
+kubectl create -f securing-gitops-demo-workflow-signed.yaml
+```
 
+* Signed Pipeline
+
+<img align="center" width="570" src="assets/argo6.png">
+
+* Cosign Sign & Push Image signature
+
+<img align="center" width="570" src="assets/argo7.png">
+
+* GitHub Registry Signed App + Signature
+
+<img align="center" width="570" src="assets/argo8.png">
+
+## Run the Unsigned Pipeline
+
+```sh
+kubectl create -f run/securing-gitops-demo-workflow-unsigned.yaml
+```
+
+* Unsigned Pipeline
+
+<img align="center" width="570" src="assets/argo9.png">
+
+* Kyverno protects the Pipeline to be deployed
+
+<img align="center" width="570" src="assets/argo10.png">
 
 ## Adding Slack to Argo Notifications
 

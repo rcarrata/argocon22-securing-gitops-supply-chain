@@ -10,23 +10,7 @@ We will demonstrate how to eliminate security risks on the software supply chain
 
 ## Run the Demo
 
-* Prerequisites: Follow the [prerequisites installation guide](docs/demo-guide.md)
-
-* Run the demo:
-
-```sh
-git clone https://github.com/rcarrata/argocon22-securing-gitops-supply-chain.git
-```
-
-* Available very soon! Stayed tuned!
-
-Enjoy! :)
-
-# Demo Walkthrough
-
-If you want to sneak peak the demo without running it in your k8s cluster, check out this walkthrough:
-
-* Available very soon! Stayed tuned!
+* Follow the [demo guide](docs/demo-guide.md)
 
 ## Slides
 
