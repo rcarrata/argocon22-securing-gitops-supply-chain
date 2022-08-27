@@ -1,28 +1,74 @@
 # Sign Images with Sigstore
 
-## Bootstrap
+## Install ArgoCD / OpenShift GitOps:
 
-* Install OpenShift Pipelines / Tekton:
+* Install ArgoCD / OpenShift GitOps
 
-```bash
-kubectl apply -f bootstrap/openshift-pipelines-operator-subscription.yaml
+```sh
+until kubectl apply -k bootstrap/argocd/; do sleep 2; done
 ```
 
-* Install Kyverno though Helm:
+* After couple of minutes check the OpenShift GitOps and Pipelines:
 
-```bash
-helm repo add kyverno https://kyverno.github.io/kyverno/
-helm repo update
-helm install kyverno --namespace kyverno kyverno/kyverno --create-namespace
+```sh
+ARGOCD_ROUTE=$(kubectl get route openshift-gitops-server -n openshift-gitops -o jsonpath='{.spec.host}{"\n"}')
+
+curl -ks -o /dev/null -w "%{http_code}" https://$ARGOCD_ROUTE
 ```
 
-* Check that Kyverno pods are Running state:
+## Deploy Tekton Tasks and Kyverno using GitOps
 
-```bash
-kubectl get pod -n kyverno
-NAME                      READY   STATUS    RESTARTS   AGE
-kyverno-55f86d8cd-69pzv   1/1     Running   0          2m3s
+First, let's install Kyverno with GitOps using Helm chart.
+
+* To do that, let's deploy an ArgoCD Application with the Helm chart and the targetRevision for Kyverno:
+
+```sh
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kyverno
+  namespace: openshift-gitops
+spec:
+  destination:
+    namespace: kyverno
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    helm:
+    chart: kyverno
+    repoURL: https://kyverno.github.io/kyverno/
+    targetRevision: v2.3.1
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
 ```
+
+* Let's apply it in our K8S/OCP cluster:
+
+```sh
+kubectl apply -f argocd/kyverno-app.yaml
+```
+
+* After a couple of minutes, our Kyverno components are deployed in the Kubernetes clusters, and all are in sync:
+
+[![](/images/signing2.png "signing2.png")]({{site.url}}/images/signing2.png)
+
+NOTE: remember that you need to patch the Kyverno Deployment to add the registry credentials as we showed in the first part of this blog post:
+
+```sh
+kubectl get deploy kyverno -n kyverno -o yaml | grep containers -A5
+      containers:
+      - args:
+        - --imagePullSecrets=regcred
+        env:
+        - name: INIT_CONFIG
+          value: kyverno
+```
+
+Once we have Kyverno installed let's install the Tekton Tasks and Pipelines into the namespace selected.
 
 ## Deploy Tekton Pipeline and Tasks
 

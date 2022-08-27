@@ -12,8 +12,6 @@ spec:
         value: "https://github.com/rcarrata/pipelines-vote-api"
       - name: git_branch
         value: 'master'
-      - name: target_branch
-        value: 'master'
       - name: container_tag
         value: 'v2'
       - name: container_image

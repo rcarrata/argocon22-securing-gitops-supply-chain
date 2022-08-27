@@ -70,6 +70,7 @@ kubectl patch serviceaccount $SERVICE_ACCOUNT_NAME \
   -p "{\"imagePullSecrets\": [{\"name\": \"regcred\"}]}" -n $NAMESPACE
 kubectl patch serviceaccount default \
  -p "{\"imagePullSecrets\": [{\"name\": \"regcred\"}]}" -n $NAMESPACE
+ oc secrets link default regcred -n argo
 ```
 
 

@@ -46,8 +46,6 @@ spec:
       value: ""
     - name: git_branch
       value: ""
-    - name: target_branch
-      value: ""
     - name: container_tag
       value: "stable"
     - name: container_image
