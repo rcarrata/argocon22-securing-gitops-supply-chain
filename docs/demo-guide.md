@@ -1,4 +1,4 @@
-## Pre Requisites for run the demo in OpenShift
+# Demo Guide
 
 ## Clone the GitHub
 
