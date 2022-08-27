@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: ci-workflow-unsigned
+  namespace: argo
+  labels:
+    workflows.argoproj.io/workflow-template: ci-workflow
+spec:
+  arguments:
+    parameters:
+      - name: app_repo
+        value: "https://github.com/rcarrata/pipelines-vote-api"
+      - name: git_branch
+        value: 'master'
+      - name: container_tag
+        value: 'unsigned'
+      - name: container_image
+        value: "ghcr.io/rcarrata/pipelines-vote-api"
+      - name: dockerfile
+        value: Dockerfile
+      - name: path
+        value: "k8s/"
+      - name: deployment_name
+        value: "pipelines-vote-api"
+  workflowTemplateRef:
+    name: ci-workflow
