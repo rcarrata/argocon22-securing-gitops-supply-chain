@@ -134,17 +134,17 @@ kubectl create -f securing-gitops-demo-workflow-signed.yaml
 
 <img align="center" width="570" src="assets/argo8.png">
 
-## Run the Unsigned Pipeline
+## Stoping to run the Hacked Pipeline with Kyverno
 
 ```sh
-kubectl create -f run/securing-gitops-demo-workflow-unsigned.yaml
+kubectl create -f run/securing-gitops-demo-workflow-hacked.yaml
 ```
 
 * Unsigned Pipeline
 
 <img align="center" width="570" src="assets/argo9.png">
 
-* Kyverno protects the Pipeline to be deployed
+* Kyverno protects the cluster to deploy the hacked/unsigned image
 
 <img align="center" width="570" src="assets/argo10.png">
 
