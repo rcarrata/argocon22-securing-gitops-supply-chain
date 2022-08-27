@@ -43,7 +43,6 @@ kubectl create secret docker-registry regcred --docker-server=ghcr.io --docker-u
 oc adm policy add-role-to-user -n argo -z default admin
 ```
 
-
 ## Adding regcred to kyverno to read the signatures
 
 ```
@@ -70,10 +69,13 @@ kubectl patch serviceaccount $SERVICE_ACCOUNT_NAME \
   -p "{\"imagePullSecrets\": [{\"name\": \"regcred\"}]}" -n $NAMESPACE
 kubectl patch serviceaccount default \
  -p "{\"imagePullSecrets\": [{\"name\": \"regcred\"}]}" -n $NAMESPACE
- oc secrets link default regcred -n argo
 ```
 
+## Add the Hacked Pipeline
 
+```sh
+kubectl create -f securing-gitops-demo-workflow-hacked.yaml
+```
 
 
 ## Adding Slack to Argo Notifications

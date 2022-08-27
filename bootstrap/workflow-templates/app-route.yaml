@@ -1,0 +1,18 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: pipelines-vote-api
+  labels:
+    app: pipelines-vote-api
+spec:
+  path: /vote
+  to:
+    kind: Service
+    name: pipelines-vote-api
+    weight: 100
+  port:
+    targetPort: 9000
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None
