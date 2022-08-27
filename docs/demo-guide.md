@@ -71,11 +71,44 @@ kubectl patch serviceaccount default \
  -p "{\"imagePullSecrets\": [{\"name\": \"regcred\"}]}" -n $NAMESPACE
 ```
 
-## Add the Hacked Pipeline
+## Cosign Generate Key-Pairs
+
+```sh
+cosign generate-key-pair k8s://${NAMESPACE}/cosign
+
+
+```
+
+## Run Normal Pipeline
+
+```sh
+kubectl create -f securing-gitops-demo-workflow-normal.yaml
+```
+
+<img align="center" width="570" src="assets/argo1.png">
+
+<img align="center" width="570" src="assets/argo2.png">
+
+
+## Run the Hacked Pipeline
 
 ```sh
 kubectl create -f securing-gitops-demo-workflow-hacked.yaml
 ```
+
+<img align="center" width="570" src="assets/argo3.png">
+
+<img align="center" width="570" src="assets/argo4.png">
+
+## Run the Hacked Pipeline
+
+```sh
+kubectl create -f securing-gitops-demo-workflow-hacked.yaml
+```
+
+<img align="center" width="570" src="assets/argo3.png">
+
+<img align="center" width="570" src="assets/argo4.png">
 
 
 ## Adding Slack to Argo Notifications

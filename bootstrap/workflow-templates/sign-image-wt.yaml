@@ -25,8 +25,7 @@ spec:
         - -c
         - |
           #!/busybox/env /busybox/sh
-          set -x
-
+          
           CMD="cosign sign --key k8s://{{workflow.parameters.namespace}}/cosign {{workflow.parameters.container_image}}:{{workflow.parameters.container_tag}}"
 
           echo "${CMD}"

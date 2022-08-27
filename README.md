@@ -10,7 +10,7 @@ We will demonstrate how to eliminate security risks on the software supply chain
 
 ## Run the Demo
 
-* Prerequisites: Follow the [prerequisites installation guide](docs/prereqs.md)
+* Prerequisites: Follow the [prerequisites installation guide](docs/demo-guide.md)
 
 * Run the demo:
 
