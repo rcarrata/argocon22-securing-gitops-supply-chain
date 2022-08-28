@@ -63,7 +63,7 @@ kubectl get deploy kyverno -n kyverno -o yaml | grep containers -A5
           value: kyverno
 ```
 
-## Configure RBAC for the Image Registry within Argo Workflows Namespace
+## 5. Configure RBAC for the Image Registry within Argo Workflows Namespace
 
 * Add regcreds GH Registry to the Argo, and default serviceAccounts:
 
@@ -76,7 +76,7 @@ kubectl patch serviceaccount default \
  -p "{\"imagePullSecrets\": [{\"name\": \"regcred\"}]}" -n $NAMESPACE
 ```
 
-## Cosign Generate Key-Pairs
+## 6. Cosign Generate Key-Pairs
 
 * Generate Cosign Key Pairs within the k8s/ocp cluster
 
@@ -84,7 +84,7 @@ kubectl patch serviceaccount default \
 cosign generate-key-pair k8s://${NAMESPACE}/cosign
 ```
 
-## Run Normal Pipeline
+## 7. Run Normal Pipeline
 
 * Run a Argo Workflow for execute the CI Pipeline in a normal / regular usage way:
 
@@ -100,7 +100,7 @@ kubectl create -f run/securing-gitops-demo-workflow-normal.yaml
 
 <img align="center" width="570" src="assets/argo2.png">
 
-## Run the Hacked Pipeline
+## 8. Run the Hacked Pipeline
 
 * Run a Argo Workflow for execute the CI Pipeline with a Hacked and vulnerabilities included:
 
@@ -120,7 +120,7 @@ kubectl create -f run/securing-gitops-demo-workflow-hacked.yaml
 
 <img align="center" width="570" src="assets/argo5.png">
 
-## Deploy the Image Check Kyverno Cluster Policy
+## 10. Deploy the Image Check Kyverno Cluster Policy
 
 * Apply the Image Check Kyverno Cluster Policy for check images with pipelines-vote-api tags:
 
@@ -128,7 +128,7 @@ kubectl create -f run/securing-gitops-demo-workflow-hacked.yaml
 kubectl apply -k policy
 ```
 
-## Run the Signed Pipeline
+## 11. Run the Signed Pipeline
 
 * Run a Argo Workflow for execute the CI Pipeline with sign steps and Kyverno verification:
 
@@ -148,7 +148,7 @@ kubectl create -f securing-gitops-demo-workflow-signed.yaml
 
 <img align="center" width="570" src="assets/argo8.png">
 
-## Stoping to run the Hacked Pipeline with Kyverno
+## 12. Stopping to run the Hacked Pipeline with Kyverno
 
 * Run a Argo Workflow for execute the CI Pipeline demonstrating how Kyverno stops the unsigned images:
 
@@ -164,7 +164,7 @@ kubectl create -f run/securing-gitops-demo-workflow-hacked.yaml
 
 <img align="center" width="570" src="assets/argo10.png">
 
-## Adding Slack to Argo Notifications
+## 13. Adding Slack to Argo Notifications
 
 ```bash
 https://github.com/argoproj/argo-workflows/blob/master/examples/exit-handler-slack.yaml
