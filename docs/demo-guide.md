@@ -9,9 +9,7 @@ cd argocon22-securing-gitops-supply-chain
 
 > This repository works both for OpenShift and all Kubernetes. If Kubernetes Vanilla is used follow first the [prerequisites guide](prereqs-k8s.md)
 
-## 3. Add Github Registry Secrets
-
-## 2. Install ArgoCD/OpenShift GitOps
+## 2. Install ArgoCD/OpenShift GitOps
 
 * Install ArgoCD / OpenShift GitOps
 
