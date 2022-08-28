@@ -1,29 +1,30 @@
 # Demo Guide
 
-## Clone the GitHub
+## 1. Clone the GitHub
 
-```sh
+```bash
 git clone https://github.com/rcarrata/argocon22-securing-gitops-supply-chain.git
 cd argocon22-securing-gitops-supply-chain
 ```
 
-## Install ArgoCD / OpenShift GitOps:
+## 2. Install ArgoCD / OpenShift GitOps
+
 
 * Install ArgoCD / OpenShift GitOps
 
-```sh
+```bash
 until kubectl apply -k bootstrap/argocd/; do sleep 2; done
 ```
 
 * After couple of minutes check the OpenShift GitOps and Pipelines:
 
-```sh
+```bash
 ARGOCD_ROUTE=$(kubectl get route openshift-gitops-server -n openshift-gitops -o jsonpath='{.spec.host}{"\n"}')
 
 curl -ks -o /dev/null -w "%{http_code}" https://$ARGOCD_ROUTE
 ```
 
-## Add Github Registry Secrets
+## 3. Add Github Registry Secrets
 
 * Export the token for the GitHub Registry / ghcr.io:
 
@@ -40,9 +41,17 @@ export NAMESPACE="argo"
 kubectl create secret docker-registry regcred --docker-server=ghcr.io --docker-username=${USERNAME} --docker-email=${EMAIL} --docker-password=${PAT_TOKEN} -n ${NAMESPACE}
 ```
 
-## Adding regcred to kyverno to read the signatures
+## 4. Adding regcred to kyverno to read the signatures
 
+* Generate in the Kyverno namespace the docker-registry secret with the credentials for GitHub Registry to push/pull the images and signatures:
+
+```bash
+kubectl create secret docker-registry regcred --docker-server=ghcr.io --docker-username=${USERNAME} --docker-email=${EMAIL} --docker-password=${PAT_TOKEN} -n kyverno
 ```
+
+* Modify the Kyverno Deployment in order to include the imagePullSecret referencing the credentials for GitHub Registry to pull/push images and the signatures for check the images with Kyverno mutate Admission Controllers:
+
+```bash
 kubectl get deploy kyverno -n kyverno -o yaml | grep containers -A5
 --
       containers:
@@ -53,13 +62,11 @@ kubectl get deploy kyverno -n kyverno -o yaml | grep containers -A5
           value: kyverno
 ```
 
-```
-kubectl create secret docker-registry regcred --docker-server=ghcr.io --docker-username=${USERNAME} --docker-email=${EMAIL} --docker-password=${PAT_TOKEN} -n kyverno
-```
+## Configure RBAC for the Image Registry within Argo Workflows Namespace
 
-## Add regcreds to the pullsecret
+* Add regcreds GH Registry to the Argo, and default serviceAccounts:
 
-```
+```bash
 export NAMESPACE=argo
 export SERVICE_ACCOUNT_NAME=argo
 kubectl patch serviceaccount $SERVICE_ACCOUNT_NAME \
@@ -70,15 +77,17 @@ kubectl patch serviceaccount default \
 
 ## Cosign Generate Key-Pairs
 
-```sh
+* Generate Cosign Key Pairs within the k8s/ocp cluster
+
+```bash
 cosign generate-key-pair k8s://${NAMESPACE}/cosign
-
-
 ```
 
 ## Run Normal Pipeline
 
-```sh
+* Run a Argo Workflow for execute the CI Pipeline in a normal / regular usage way:
+
+```bash
 kubectl create -f run/securing-gitops-demo-workflow-normal.yaml
 ```
 
@@ -90,10 +99,11 @@ kubectl create -f run/securing-gitops-demo-workflow-normal.yaml
 
 <img align="center" width="570" src="assets/argo2.png">
 
-
 ## Run the Hacked Pipeline
 
-```sh
+* Run a Argo Workflow for execute the CI Pipeline with a Hacked and vulnerabilities included:
+
+```bash
 kubectl create -f run/securing-gitops-demo-workflow-hacked.yaml
 ```
 
@@ -109,16 +119,19 @@ kubectl create -f run/securing-gitops-demo-workflow-hacked.yaml
 
 <img align="center" width="570" src="assets/argo5.png">
 
-
 ## Deploy the Image Check Kyverno Cluster Policy
 
-```sh
+* Apply the Image Check Kyverno Cluster Policy for check images with pipelines-vote-api tags:
+
+```bash
 kubectl apply -k policy
 ```
 
 ## Run the Signed Pipeline
 
-```sh
+* Run a Argo Workflow for execute the CI Pipeline with sign steps and Kyverno verification:
+
+```bash
 kubectl create -f securing-gitops-demo-workflow-signed.yaml
 ```
 
@@ -136,7 +149,9 @@ kubectl create -f securing-gitops-demo-workflow-signed.yaml
 
 ## Stoping to run the Hacked Pipeline with Kyverno
 
-```sh
+* Run a Argo Workflow for execute the CI Pipeline demonstrating how Kyverno stops the unsigned images:
+
+```bash
 kubectl create -f run/securing-gitops-demo-workflow-hacked.yaml
 ```
 
@@ -150,6 +165,6 @@ kubectl create -f run/securing-gitops-demo-workflow-hacked.yaml
 
 ## Adding Slack to Argo Notifications
 
-```
+```bash
 https://github.com/argoproj/argo-workflows/blob/master/examples/exit-handler-slack.yaml
 ```
