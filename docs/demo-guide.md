@@ -80,7 +80,7 @@ This step is required in order to allow kyverno to access the signatures.
 kubectl create secret docker-registry regcred --docker-server=ghcr.io --docker-username=${USERNAME} --docker-email=${EMAIL} --docker-password=${PAT_TOKEN} -n kyverno
 ```
 
-* In order to include the imagePullSecret referencing the credentials for GitHub Registry to pull/push images and the signatures for checking the images with Kyverno mutate Admission Controllers, we need to modify the Kyverno Deployment:
+* In order for the images to be pull/pushed and their signatures checked with Kyverno mutate Admission Controller, we need to include the imagePullSecret referencing the credentials for GitHub Registry. This is done by modifying the Kyverno Deployment and adding *imagePullSecrets=regcred* under *args* section in *containers*, as follows:
 
 ```bash
 kubectl get deploy kyverno -n kyverno -o yaml | grep containers -A5
@@ -91,6 +91,11 @@ kubectl get deploy kyverno -n kyverno -o yaml | grep containers -A5
         env:
         - name: INIT_CONFIG
           value: kyverno
+```
+
+To edit the deployment, you can use the following command:
+```bash
+ kubectl edit deploy kyverno -n kyverno -o yaml
 ```
 
 ## 5. Configure RBAC for the Image Registry within Argo Workflows Namespace
