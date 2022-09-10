@@ -55,7 +55,7 @@ This deploys the prerequistes required for this demo.
 
 ## 3. Add Github Registry Secrets
 
-* Export your [Github Personal Access Token] for GitHub Registry/ghcr.io:
+* Export your [Github Personal Access Token](https://docs.github.com/en/enterprise-server@3.4/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)for GitHub Registry/ghcr.io:
 
 ```bash
 export PAT_TOKEN="xxx"
