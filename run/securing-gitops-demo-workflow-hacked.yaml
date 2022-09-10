@@ -9,18 +9,18 @@ spec:
   arguments:
     parameters:
       - name: app_repo
-        value: "https://github.com/rcarrata/pipelines-vote-api"
+        value: "https://github.com/rcarrata/argocon22-app"
       - name: git_branch
         value: 'hacked'
       - name: container_tag
-        value: 'hacked'
+        value: 'v2'
       - name: container_image
-        value: "ghcr.io/rcarrata/pipelines-vote-api"
+        value: "ghcr.io/rcarrata/argocon22-app"
       - name: dockerfile
         value: Dockerfile
       - name: path
         value: "k8s/"
       - name: deployment_name
-        value: "pipelines-vote-api"
+        value: "argocon22-app"
   workflowTemplateRef:
     name: ci-workflow

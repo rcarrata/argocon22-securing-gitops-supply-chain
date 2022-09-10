@@ -126,6 +126,10 @@ kubectl create -f run/securing-gitops-demo-workflow-normal.yaml
 
 <img align="center" width="570" src="assets/argo2.png">
 
+* App deployed successfully
+
+<img align="center" width="570" src="assets/argo2-1.png">
+
 ## 8. Run the Hacked Pipeline
 
 * Run a Argo Workflow for execute the CI Pipeline with a Hacked and vulnerabilities included:
@@ -136,11 +140,11 @@ kubectl create -f run/securing-gitops-demo-workflow-hacked.yaml
 
 * Hacked Pipeline with App with Hacked Dockerfile and App
 
-<img align="center" width="570" src="assets/argo3.png">
+<img align="center" width="700" src="assets/argo3.png">
 
 * Hacked Application running in the App
 
-<img align="center" width="570" src="assets/argo4.png">
+<img align="center" width="600" src="assets/argo4.png">
 
 * GitHub Registry hacked App
 
@@ -164,7 +168,7 @@ kubectl create -f securing-gitops-demo-workflow-signed.yaml
 
 * Signed Pipeline
 
-<img align="center" width="570" src="assets/argo6.png">
+<img align="center" width="700" src="assets/argo6.png">
 
 * Cosign Sign & Push Image signature
 
