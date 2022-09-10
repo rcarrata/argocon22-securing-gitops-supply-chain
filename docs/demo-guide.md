@@ -34,21 +34,21 @@ To do this, we are using Argo App of Apps pattern which deploys an ArgoApp that 
 kubectl apply -f bootstrap/securing-gitops-demo-app.yaml
 ```
 
-<img align="center" width="570" src="assets/prereqs1.png">
+<img align="center" width="900" src="assets/prereqs1.png">
 
 * The Argo Application called **Securing GitOps Demo App**  will deploy the following sub Argo Applications using the Argo App of Apps pattern:
 
   1. **Argo Worflows** :
   <br/>
-  <img align="center" width="570" src="assets/prereqs3.png">
+  <img align="center" width="700" src="assets/prereqs3.png">
   <br/>
   2. **Kyverno** ArgoCD App:
   <br/>
-  <img align="center" width="570" src="assets/prereqs4.png">
+  <img align="center" width="700" src="assets/prereqs4.png">
   <br/>
   3. **Argo Workflow Templates** :
   <br/>
-  <img align="center" width="570" src="assets/prereqs5.png">
+  <img align="center" width="700" src="assets/prereqs5.png">
 
 
 This deploys the prerequistes required for this demo.
@@ -183,15 +183,15 @@ kubectl create -f run/securing-gitops-demo-workflow-signed.yaml
 
 * Signed Pipeline
 
-<img align="center" width="700" src="assets/argo6.png">
+<img align="center" width="900" src="assets/argo6.png">
 
 * Cosign Sign & Push Image signature
 
-<img align="center" width="570" src="assets/argo7.png">
+<img align="center" width="700" src="assets/argo7.png">
 
 * GitHub Registry Signed App + Signature
 
-<img align="center" width="570" src="assets/argo8.png">
+<img align="center" width="700" src="assets/argo8.png">
 
 ## 12. Stopping to run the Hacked Pipeline with Kyverno
 
@@ -203,11 +203,11 @@ kubectl create -f run/securing-gitops-demo-workflow-hacked.yaml
 
 * Unsigned Pipeline
 
-<img align="center" width="570" src="assets/argo9.png">
+<img align="center" width="900" src="assets/argo9.png">
 
 * Kyverno protects the cluster to deploy the hacked/unsigned image:
 
-<img align="center" width="570" src="assets/argo10.png">
+<img align="center" width="700" src="assets/argo10.png">
 
 ## 13. Stopping to run a Hacked ArgoCD Application
 
@@ -221,11 +221,11 @@ kubectl apply -f run/securing-gitops-demo-argocd-hacked.yaml
 
 * Kyverno denies the request because the container image that is defined in the repository within the k8s Deployment, is not signed with the proper cosign key:
 
-<img align="center" width="570" src="assets/argo12.png">
+<img align="center" width="700" src="assets/argo12.png">
 
 * As we can check, the Admission Controller from Kyverno, denied the request to deploy the application with the hacked container image because the signature mismatch after compare with the public key within the check-image from Kyverno:
 
-<img align="center" width="570" src="assets/argo11.png">
+<img align="center" width="700" src="assets/argo11.png">
 
 ## 14. Cleaning the demo
 
