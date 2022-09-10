@@ -37,23 +37,21 @@ kubectl apply -f bootstrap/securing-gitops-demo-app.yaml
 
 * The **Securing GitOps Demo App** Argo Application will deploy these sub Argo Applications using the Argo App of Apps pattern:
 
-  1. Argo Worflows ArgoCD App:
+  1. **Argo Worflows** ArgoCD App:
 
   <img align="center" width="570" src="assets/prereqs3.png">
 
-  2. Kyverno:
+  2. **Kyverno** ArgoCD App:
 
   <img align="center" width="570" src="assets/prereqs4.png">
 
-  3. 
+  3. **Argo Workflow Templates** ArgoCD App:
+
+  <img align="center" width="570" src="assets/prereqs5.png">
+
+These three ArgoApps will create and deploy the prerequistes needed for running the demo, Argo Workflows, Kyverno and Argo Workflow Templates.
 
 ## 3. Add Github Registry Secrets
-
-* Create Namespace for the demo
-
-```bash
-kubectl create ns argo
-```
 
 * Export the token for the GitHub Registry / ghcr.io:
 
