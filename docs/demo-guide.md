@@ -158,12 +158,18 @@ kubectl create -f run/securing-gitops-demo-workflow-hacked.yaml
 kubectl apply -k policy
 ```
 
+* Check that the Cluster Policy for check-image from Kyverno is deployed properly:
+
+```bash
+kubectl get clusterpolicy check-image -n kyverno -o yaml
+```
+
 ## 11. Run the Signed Pipeline
 
 * Run a Argo Workflow for execute the CI Pipeline with sign steps and Kyverno verification:
 
 ```bash
-kubectl create -f securing-gitops-demo-workflow-signed.yaml
+kubectl create -f run/securing-gitops-demo-workflow-signed.yaml
 ```
 
 * Signed Pipeline
