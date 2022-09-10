@@ -205,12 +205,42 @@ kubectl create -f run/securing-gitops-demo-workflow-hacked.yaml
 
 <img align="center" width="570" src="assets/argo9.png">
 
-* Kyverno protects the cluster to deploy the hacked/unsigned image
+* Kyverno protects the cluster to deploy the hacked/unsigned image:
 
 <img align="center" width="570" src="assets/argo10.png">
 
-## 13. Adding Slack to Argo Notifications
+## 13. Stopping to run a Hacked ArgoCD Application
+
+Let's see how we can prevent to deploy a hacked image using ArgoCD application and Kyverno.
+
+* Kyverno can also stop Hacked ArgoCD application that syncs with k8s deployments that uses unsigned container images from the registry:
 
 ```bash
-https://github.com/argoproj/argo-workflows/blob/master/examples/exit-handler-slack.yaml
+kubectl apply -f run/securing-gitops-demo-argocd-hacked.yaml
 ```
+
+* Kyverno denies the request because the container image that is defined in the repository within the k8s Deployment, is not signed with the proper cosign key:
+
+<img align="center" width="570" src="assets/argo12.png">
+
+* As we can check, the Admission Controller from Kyverno, denied the request to deploy the application with the hacked container image because the signature mismatch after compare with the public key within the check-image from Kyverno:
+
+<img align="center" width="570" src="assets/argo11.png">
+
+## 14. Cleaning the demo
+
+* Clean the resources in the argo namespace:
+
+```bash
+kubectl delete -f run/securing-gitops-demo-argocd-hacked.yaml
+kubectl delete -k policy/
+
+kubectl -n ${NAMESPACE} delete deployment argocon22-app 
+kubectl -n ${NAMESPACE} delete svc argocon22-app 
+
+for i in $(kubectl get pod -n ${NAMESPACE} --no-headers | grep -v Running | awk '{ print $1 }'); do kubectl delete pod $i -n ${NAMESPACE}; done
+
+kubectl delete -n ${NAMESPACE} workflow --all
+```
+
+* Delete the container image repository in the [GitHub registry](https://github.com/users/rcarrata/packages/container/argocon22-app/settings).
