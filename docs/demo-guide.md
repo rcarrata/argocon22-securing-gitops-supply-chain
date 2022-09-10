@@ -55,7 +55,7 @@ This deploys the prerequistes required for this demo.
 
 ## 3. Add Github Registry Secrets
 
-* Export your [Github Personal Access Token](https://docs.github.com/en/enterprise-server@3.4/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)for GitHub Registry/ghcr.io:
+* Export your [Github Personal Access Token](https://docs.github.com/en/enterprise-server@3.4/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) for GitHub Registry/ghcr.io:
 
 ```bash
 export PAT_TOKEN="xxx"
@@ -72,9 +72,9 @@ kubectl create secret docker-registry regcred --docker-server=ghcr.io --docker-u
 
 ## 4. Adding regcred to kyverno 
 
-This step is required in order to allow kyverno to read the signatures.
+This step is required in order to allow kyverno to access the signatures.
 
-*  In the Kyverno namespace, generate the docker-registry secret with the credentials for GitHub Registry to push/pull the images and signatures.
+*  In Kyverno namespace, generate the docker-registry secret with the credentials for GitHub Registry to push/pull the images and signatures.
 
 ```bash
 kubectl create secret docker-registry regcred --docker-server=ghcr.io --docker-username=${USERNAME} --docker-email=${EMAIL} --docker-password=${PAT_TOKEN} -n kyverno
@@ -87,7 +87,7 @@ kubectl get deploy kyverno -n kyverno -o yaml | grep containers -A5
 --
       containers:
       - args:
-        - --imagePullSecrets=regcred
+        - imagePullSecrets=regcred
         env:
         - name: INIT_CONFIG
           value: kyverno
