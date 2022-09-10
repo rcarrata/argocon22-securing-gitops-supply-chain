@@ -27,7 +27,8 @@ curl -ks -o /dev/null -w "%{http_code}" https://$ARGOCD_ROUTE
 
 ## 3. Deploy the prerequisites for the demo
 
-* We are using use ArgoCD to deploy all the components needed in this demo. 
+* We are using use ArgoCD to deploy all the components needed in this demo.
+
 To do this, we are using Argo App of Apps pattern which deploys an ArgoApp that will then deploy the rest of our ArgoCD Applications:
 
 ```bash
@@ -39,17 +40,13 @@ kubectl apply -f bootstrap/securing-gitops-demo-app.yaml
 * The Argo Application called **Securing GitOps Demo App**  will deploy the following sub Argo Applications using the Argo App of Apps pattern:
 
   1. **Argo Worflows** :
-  <br/>
   <img align="center" width="700" src="assets/prereqs3.png">
-  <br/>
-  2. **Kyverno** ArgoCD App:
-  <br/>
-  <img align="center" width="700" src="assets/prereqs4.png">
-  <br/>
-  3. **Argo Workflow Templates** :
-  <br/>
-  <img align="center" width="700" src="assets/prereqs5.png">
 
+  2. **Kyverno** ArgoCD App:
+  <img align="center" width="700" src="assets/prereqs4.png">
+  
+  3. **Argo Workflow Templates** :
+  <img align="center" width="700" src="assets/prereqs5.png">
 
 This deploys the prerequistes required for this demo.
 
@@ -70,11 +67,11 @@ export NAMESPACE="argo"
 kubectl create secret docker-registry regcred --docker-server=ghcr.io --docker-username=${USERNAME} --docker-email=${EMAIL} --docker-password=${PAT_TOKEN} -n ${NAMESPACE}
 ```
 
-## 4. Adding regcred to kyverno 
+## 4. Adding regcred to kyverno
 
 This step is required in order to allow kyverno to access the signatures.
 
-*  In Kyverno namespace, generate the docker-registry secret with the credentials for GitHub Registry to push/pull the images and signatures.
+* In Kyverno namespace, generate the docker-registry secret with the credentials for GitHub Registry to push/pull the images and signatures.
 
 ```bash
 kubectl create secret docker-registry regcred --docker-server=ghcr.io --docker-username=${USERNAME} --docker-email=${EMAIL} --docker-password=${PAT_TOKEN} -n kyverno
@@ -94,6 +91,7 @@ kubectl get deploy kyverno -n kyverno -o yaml | grep containers -A5
 ```
 
 To edit the deployment, you can use the following command:
+
 ```bash
  kubectl edit deploy kyverno -n kyverno -o yaml
 ```
@@ -113,19 +111,21 @@ kubectl patch serviceaccount default \
 
 ## 6. Generate Key-Pairs in Cosign
 
-* Generate the Cosign Key Pairs in the k8s/ocp cluster.
+* Generate the Cosign Key Pairs in the k8s/ocp cluster:
 
 ```bash
 cosign generate-key-pair k8s://${NAMESPACE}/cosign
 ```
 
-## 7. Run the Unsigned Pipeline 
+## 7. Run the Unsigned/Normal Pipeline
 
-* Run an Argo Workflow to execute the CI Pipeline without signatures. 
+* Run an Argo Workflow to execute the CI Pipeline without signatures:
 
 ```bash
 kubectl create -f run/securing-gitops-demo-workflow-normal.yaml
 ```
+
+NOTE: Change the container_image from the run/ sections to your github user (instead of "rcarrata" use yours).
 
 * Regular Pipeline to Build - Bake - Deploy
 
@@ -141,7 +141,7 @@ kubectl create -f run/securing-gitops-demo-workflow-normal.yaml
 
 ## 8. Run the Hacked Pipeline
 
-* Run an Argo Workflow to execute the CI Pipeline with the vulnerability. 
+* Run an Argo Workflow to execute the CI Pipeline with the vulnerability:
 
 ```bash
 kubectl create -f run/securing-gitops-demo-workflow-hacked.yaml
@@ -161,7 +161,7 @@ kubectl create -f run/securing-gitops-demo-workflow-hacked.yaml
 
 ## 10. Deploy the Image Check Kyverno Cluster Policy
 
-* Apply the Image Check Kyverno Cluster Policy to check images with a tag called pipelines-vote-api:
+* Apply the Image Check Kyverno Cluster Policy to check images with a tag called argocon22-app:
 
 ```bash
 kubectl apply -k policy
