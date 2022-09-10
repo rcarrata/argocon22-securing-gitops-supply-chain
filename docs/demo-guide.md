@@ -7,7 +7,7 @@ git clone https://github.com/rcarrata/argocon22-securing-gitops-supply-chain.git
 cd argocon22-securing-gitops-supply-chain
 ```
 
-> This repository works for OpenShift and all other Kubernetes flavours. If you are using Vanilla Kubernetes, follow the [prerequisites guide](prereqs-k8s.md)first.
+> This repository works for OpenShift and all other Kubernetes flavours. If you are using Vanilla Kubernetes, follow the [prerequisites guide](prereqs-k8s.md) first.
 
 ## 2. Install ArgoCD/OpenShift GitOps
 
@@ -36,21 +36,22 @@ kubectl apply -f bootstrap/securing-gitops-demo-app.yaml
 
 <img align="center" width="570" src="assets/prereqs1.png">
 
-* The **Securing GitOps Demo App** Argo Application will deploy these sub Argo Applications using the Argo App of Apps pattern:
+* The Argo Application called **Securing GitOps Demo App**  will deploy the following sub Argo Applications using the Argo App of Apps pattern:
 
-  1. **Argo Worflows** ArgoCD App:
-
+  1. **Argo Worflows** :
+  <br/>
   <img align="center" width="570" src="assets/prereqs3.png">
 
   2. **Kyverno** ArgoCD App:
-
+  <br/>
   <img align="center" width="570" src="assets/prereqs4.png">
 
-  3. **Argo Workflow Templates** ArgoCD App:
-
+  3. **Argo Workflow Templates** :
+  <br/>
   <img align="center" width="570" src="assets/prereqs5.png">
 
-Once completed, the three ArgoApps called Argo Workflows, Kyverno and Argo Workflow Templates are created. This deploys the prerequistes required for this demo.
+
+This deploys the prerequistes required for this demo.
 
 ## 3. Add Github Registry Secrets
 
