@@ -25,7 +25,35 @@ ARGOCD_ROUTE=$(kubectl get route openshift-gitops-server -n openshift-gitops -o 
 curl -ks -o /dev/null -w "%{http_code}" https://$ARGOCD_ROUTE
 ```
 
+## 3. Deploy prerequisites for the demo
+
+* We will use ArgoCD to deploy all the components needed in this demo, for this reason, we will use Argo App of Apps pattern to deploy an ArgoApp that will deploy other ArgoCD Applications:
+
+```bash
+kubectl apply -f bootstrap/securing-gitops-demo-app.yaml
+```
+
+<img align="center" width="570" src="assets/prereqs1.png">
+
+* The **Securing GitOps Demo App** Argo Application will deploy these sub Argo Applications using the Argo App of Apps pattern:
+
+  1. Argo Worflows ArgoCD App:
+
+  <img align="center" width="570" src="assets/prereqs3.png">
+
+  2. Kyverno:
+
+  <img align="center" width="570" src="assets/prereqs4.png">
+
+  3. 
+
 ## 3. Add Github Registry Secrets
+
+* Create Namespace for the demo
+
+```bash
+kubectl create ns argo
+```
 
 * Export the token for the GitHub Registry / ghcr.io:
 

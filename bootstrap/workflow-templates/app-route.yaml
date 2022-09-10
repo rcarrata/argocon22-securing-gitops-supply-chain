@@ -1,17 +1,17 @@
 kind: Route
 apiVersion: route.openshift.io/v1
 metadata:
-  name: pipelines-vote-api
+  name: argocon22-app
   labels:
-    app: pipelines-vote-api
+    app: argocon22-app
 spec:
   path: /vote
   to:
     kind: Service
-    name: pipelines-vote-api
+    name: argocon22-app
     weight: 100
   port:
-    targetPort: 9000
+    targetPort: 8080
   tls:
     termination: edge
     insecureEdgeTerminationPolicy: Redirect
