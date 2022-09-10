@@ -5,7 +5,7 @@ metadata:
   labels:
     app: argocon22-app
 spec:
-  path: /vote
+  path: /
   to:
     kind: Service
     name: argocon22-app
