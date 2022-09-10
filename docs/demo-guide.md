@@ -55,7 +55,7 @@ This deploys the prerequistes required for this demo.
 
 ## 3. Add Github Registry Secrets
 
-* Export the token for the GitHub Registry / ghcr.io:
+* Export your [Github Personal Access Token  ](https://github.com/rcarrata/argocon22-securing-gitops-supply-chain/blob/main/docs/demo-guide.md) for GitHub Registry / ghcr.io:
 
 ```bash
 export PAT_TOKEN="xxx"
