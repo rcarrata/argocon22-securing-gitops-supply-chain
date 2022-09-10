@@ -80,7 +80,7 @@ This step is required in order to allow kyverno to access the signatures.
 kubectl create secret docker-registry regcred --docker-server=ghcr.io --docker-username=${USERNAME} --docker-email=${EMAIL} --docker-password=${PAT_TOKEN} -n kyverno
 ```
 
-* In order for the images to be pull/pushed and their signatures checked with Kyverno mutate Admission Controller, we need to include the imagePullSecret referencing the credentials for GitHub Registry. This is done by modifying the Kyverno Deployment and adding *imagePullSecrets=regcred* under *args* section in *containers*, as follows:
+* In order for the images to be pull/pushed and their signatures checked with Kyverno mutate Admission Controller, we need to include the imagePullSecret referencing the credentials for GitHub Registry. This is done by modifying the Kyverno Deployment and adding *imagePullSecrets=regcred* under *args* section in *containers*, the following shows what it should look like:
 
 ```bash
 kubectl get deploy kyverno -n kyverno -o yaml | grep containers -A5
