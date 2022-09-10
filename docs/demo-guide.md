@@ -41,11 +41,11 @@ kubectl apply -f bootstrap/securing-gitops-demo-app.yaml
   1. **Argo Worflows** :
   <br/>
   <img align="center" width="570" src="assets/prereqs3.png">
-
+  <br/>
   2. **Kyverno** ArgoCD App:
   <br/>
   <img align="center" width="570" src="assets/prereqs4.png">
-
+  <br/>
   3. **Argo Workflow Templates** :
   <br/>
   <img align="center" width="570" src="assets/prereqs5.png">
