@@ -84,7 +84,7 @@ kubectl get deploy kyverno -n kyverno -o yaml | grep containers -A5
 --
       containers:
       - args:
-        - imagePullSecrets=regcred
+        - --imagePullSecrets=regcred
         env:
         - name: INIT_CONFIG
           value: kyverno
